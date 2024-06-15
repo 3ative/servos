@@ -17,7 +17,7 @@ number:
     on_value:
       then:
         - lambda: !lambda |-
-            // Range is -1 to 1, so divide by 100
+            // Servo Write range is: -1.0 to 1.0, so divide by 100
             id(servo_1).write(x / 100.0);
 ```
 ###### 🛠 Servo Component:
@@ -38,7 +38,7 @@ servo:
 ###### 🛠 Output Component:
 ```yaml
 output:
-  - platform: ledc # ESP8266, use:esp8266_pwm
+  - platform: ledc # For ESP8266 use: esp8266_pwm
     id: output1
     pin: [YOUR GPIO]
     frequency: 50 Hz # MUST BE 50Hz

@@ -20,7 +20,7 @@ number:
             // Servo Write range is: -1.0 to 1.0, so divide by 100
             id(servo_1).write(x / 100.0);
 ```
-###### 🛠 The `servo:` Component:
+#### 🛠 The `servo:` Component:
 ```yaml
 servo:
   - id: servo_1
@@ -44,8 +44,8 @@ output:
     frequency: 50 Hz # MUST BE 50Hz
 ```
 ___
-### Advanced Cody Bits
-##### 🛠 ADVANCED: Use `on_boot:` to set position at Start-up:
+### Advanced Code-y Bits
+##### 🎁 ADVANCED: Use `on_boot:` to set position at Start-up:
 ```yaml
 esphome:
   ...
@@ -56,7 +56,7 @@ esphome:
           id(servoSlider1).make_call().set_value(0).perform();
 ```
 
-##### 🛠 ADVANCED: SINE Waving Servo 5:
+##### 🎁 ADVANCED: SINE Waving Servo 5:
 - Use ``interval:`` to Calculate Sine Values:
 ```yaml
 globals:
@@ -103,7 +103,7 @@ switch:
     optimistic: true
 ```
 
-##### 🛠 ADVANCED: SINE Waving Servo 5:
+##### 🎁 ADVANCED: SINE Waving Servo 5:
 - The Two Extra `number:` Components to control the SINE Values :
 ```yaml
   - platform: template

@@ -124,7 +124,7 @@ switch:
     name: $name 5 Speed
     min_value: 1
     max_value: 50
-    initial_value: 50
+    initial_value: 5
     step: 5
     optimistic: True
     on_value: 

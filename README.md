@@ -1,6 +1,6 @@
 # Using Servos in Home Assistant with ESPHome
 
-Using Servos from ESPHome is quite simple. Check out the 🎬[YouTube tutorial](https://youtu.be/YmqtMTO5NVc) for setting up and options available.
+Using Servos from ESPHome is quite simple. Check out the 🎬[YouTube tutorial](https://youtu.be/1f2tuS_PxIE) for setting up and options available.
 ___
 ### The Basic Setup:
 

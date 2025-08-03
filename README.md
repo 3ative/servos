@@ -31,6 +31,11 @@ output:
 
 #### 🛠 The `number:` (Slider) Component:
 ```yaml
+substitutions:
+  name: Servo Tester
+```
+
+```yaml
 number:
   - platform: template
     id: servoSlider1

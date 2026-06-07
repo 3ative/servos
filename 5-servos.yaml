@@ -1,0 +1,252 @@
+substitutions:
+  name: Servo Tester
+
+esphome:
+  name: "02-servos"
+  on_boot:
+    priority: -100
+    then:
+      - lambda: !lambda |-
+          id(servoSlider1).make_call().set_value(-100).perform();
+          id(servoSlider2).make_call().set_value(-50).perform();
+          id(servoSlider3).make_call().set_value(0).perform();
+          id(servoSlider4).make_call().set_value(50).perform();
+          id(servoSlider5).make_call().set_value(0).perform();
+
+esp32:
+  board: esp-wrover-kit
+#   cpu_frequency: 160MHz
+  framework:
+    type: arduino
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  min_auth_mode: WPA2
+
+api:
+ota:
+  platform: esphome
+
+logger:
+  logs:
+    number: none
+    servo: none
+
+globals:
+  - id: sine_wave_phase
+    type: float
+    restore_value: no
+    initial_value: '0.0'
+
+  - id: sine_wave_range
+    type: float
+    restore_value: no
+    initial_value: '0.0'
+  
+  - id: sine_wave_speed
+    type: float
+    restore_value: no
+    initial_value: '1.0'
+
+interval:
+  - interval: 40ms
+    then:
+      if:
+        condition:
+          switch.is_on: sinEnable
+        then:
+          - lambda: |-
+              auto t = id(sine_wave_phase);
+              auto range = id(sine_wave_range);
+              auto speed = id(sine_wave_speed);
+
+              // Increment phase
+              t += (2 * PI) / speed;
+              if (t >= 2 * PI) t = 0; // Reset the phase after a full cycle
+
+              id(sine_wave_phase) = t;
+              int value = round(range * sin(t));
+
+              id(servoSlider5).publish_state(value);
+
+switch:
+  - platform: template
+    id: sinEnable
+    name: $name 5 Enable Sine
+    optimistic: true
+
+number:
+  - platform: template
+    id: servoSlider1
+    name: $name 1
+    icon: mdi:sync
+    optimistic: true
+    min_value: -100
+    max_value: 100
+    initial_value: 0
+    step: 5
+    on_value:
+      then:
+        - lambda: !lambda |-
+            // Range is -1 to 1, so divide by 100
+            id(servo1).write(x / 100.0);
+
+  - platform: template
+    id: servoSlider2
+    name: $name 2
+    icon: mdi:sync
+    optimistic: true
+    min_value: -100
+    max_value: 100
+    initial_value: 0
+    step: 5
+    on_value:
+      then:
+        - lambda: !lambda |-
+            // Range is -1 to 1, so divide by 100
+            id(servo2).write(x / 100.0); 
+
+  - platform: template
+    id: servoSlider3
+    name: $name 3
+    icon: mdi:sync
+    optimistic: true
+    min_value: -100
+    max_value: 100
+    initial_value: 0
+    step: 5
+    on_value:
+      then:
+        - lambda: !lambda |-
+            // Range is -1 to 1, so divide by 100
+            id(servo3).write(x / 100.0);
+
+  - platform: template
+    id: servoSlider4
+    name: $name 4
+    icon: mdi:sync
+    optimistic: true
+    min_value: -100
+    max_value: 100
+    initial_value: 0
+    step: 5
+    on_value:
+      then:
+        - lambda: !lambda |-
+            // Range is -1 to 1, so divide by 100
+            id(servo4).write(x / 100.0);
+
+  - platform: template
+    id: servoSlider5
+    name: $name 5
+    icon: mdi:sync
+    optimistic: true
+    min_value: -100
+    max_value: 100
+    initial_value: 0
+    step: 5
+    on_value:
+      then:
+        - lambda: !lambda |-
+            // Range is -1 to 1, so divide by 100
+            // id(servo5).write( (-0.15 - ( (0.7 * x) /100 )) /100 );
+            id(servo5).write(x / 100.0);
+
+  - platform: template
+    id: servoRange
+    name: $name 5 Range
+    min_value: 0
+    max_value: 100
+    initial_value: 0
+    step: 5
+    optimistic: True
+    on_value: 
+      then:
+        - lambda: !lambda |-
+            id(sine_wave_range) = x;
+
+  - platform: template
+    id: servoSpeed
+    name: $name 5 Speed
+    min_value: 0
+    max_value: 100
+    initial_value: 5
+    step: 1
+    optimistic: True
+    on_value: 
+      then:
+        - lambda: !lambda |-
+            id(sine_wave_speed) = 5 + (100-x);
+
+servo:
+  - id: servo1
+    output: output1
+    auto_detach_time: 5s  # Optional - Default 0 (none)
+    transition_length: 0s # Optional - Default 0 (Max Speed)
+    # Calibration Optional
+    min_level: 2.7%   # Optional - Default 3%
+    idle_level: 7.3%  # Optional - Default 7.5%
+    max_level: 12.2%  # Optional - Default 12.5%
+
+  - id: servo2
+    output: output2
+    auto_detach_time: 5s  # Optional - Default 0 (none)
+    transition_length: 0s # Optional - Default 0 (Max Speed)
+    # Calibration Optional
+    min_level: 2.6%   # Optional - Default 3%
+    idle_level: 7.3%  # Optional - Default 7.5%
+    max_level: 12.2%  # Optional - Default 12.5%
+ 
+  - id: servo3
+    output: output3
+    auto_detach_time: 5s  # Optional - Default 0 (none)
+    transition_length: 0s # Optional - Default 0 (Max Speed)
+    # Calibration Optional
+    min_level: 2.7%   # Optional - Default 3%
+    idle_level: 7.5%  # Optional - Default 7.5%
+    max_level: 12.2%  # Optional - Default 12.5%
+ 
+  - id: servo4
+    output: output4
+    auto_detach_time: 5s  # Optional - Default 0 (none)
+    transition_length: 0s # Optional - Default 0 (Max Speed)
+    # Calibration Optional
+    min_level: 2.7%   # Optional - Default 3%
+    idle_level: 7.4%  # Optional - Default 7.5%
+    max_level: 12.2%  # Optional - Default 12.5%
+ 
+  - id: servo5
+    output: output5
+    auto_detach_time: 5s  # Optional - Default 0 (none)
+    transition_length: 0s # Optional - Default 0 (Max Speed)
+    # Calibration Optional
+    min_level: 2.85%   # Optional - Default 3%
+    idle_level: 7.5%  # Optional - Default 7.5%
+    max_level: 12.35%  # Optional - Default 12.5%
+
+output:
+  - platform: ledc # ESP8266, use:esp8266_pwm
+    id: output1
+    pin: 15
+    frequency: 50 Hz # MUST BE 50Hz
+
+  - platform: ledc # ESP8266, use:esp8266_pwm
+    id: output2
+    pin: 02
+    frequency: 50 Hz # MUST BE 50Hz
+
+  - platform: ledc # ESP8266, use:esp8266_pwm
+    id: output3
+    pin: 16
+    frequency: 50 Hz # MUST BE 50Hz
+
+  - platform: ledc # ESP8266, use:esp8266_pwm
+    id: output4
+    pin: 18
+    frequency: 50 Hz # MUST BE 50Hz
+
+  - platform: ledc # ESP8266, use:esp8266_pwm
+    id: output5
+    pin: 19
+    frequency: 50 Hz # MUST BE 50Hz
